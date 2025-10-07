@@ -1,5 +1,6 @@
 import requests
 import html
+import random
 
 score = 0
 
@@ -14,9 +15,9 @@ while True:
     incorrect = [html.unescape(i) for i in question_data["incorrect_answers"]]
 
     options = [correct] + incorrect
+    random.shuffle(options)
 
     print(f"\nQuestion: {question}")
-    
     for i, option in enumerate(options, 1):
         print(f"{i}. {option}")
 
@@ -25,13 +26,15 @@ while True:
     if ans.lower() == "q":
         print("Exiting..")
         break
-
-    chosen = options[int(ans) - 1]
     
-    if chosen == correct:
-        print("Correct!")
-        score += 1
-    else:
-        print(f"Wrong! The correct answer is: {correct}")
+    try:
+        chosen = options[int(ans) - 1]
+        if chosen == correct:
+            print("Correct!")
+            score += 1
+        else:
+            print(f"Wrong! The correct answer is: {correct}")
+    except (ValueError, IndexError):
+        print("Invalid choice. Please enter a valid number.")
 
 print(f"you got {score} points")
